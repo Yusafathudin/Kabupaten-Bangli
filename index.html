@@ -1,0 +1,143 @@
+<html>
+    <head>
+	
+	<link rel="stylesheet" href="leaflet/leaflet.css"/>
+	<script src="leaflet/leaflet.js"></script>
+	
+	<link rel="stylesheet" href="leaflet/leaflet.groupedlayercontrol.css"/> 
+	<script src="leaflet/leaflet.groupedlayercontrol.js"></script>
+
+	<link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Coat_of_arms_of_Bali.svg/1200px-Coat_of_arms_of_Bali.svg.png"/>
+	
+	<link rel="stylesheet" href="leaflet/L.Control.MousePosition.css"/> 
+	<script src="leaflet/L.Control.MousePosition.css"></script>
+	
+	<link rel="stylesheet" href="leaflet/L.Control.MousePosition.js"/> 
+	<script src="leaflet/L.Control.MousePosition.js"></script>
+	
+	<link rel="stylesheet" href="leaflet/Control.MiniMap.css"/> 
+	<script src="leaflet/Control.MiniMap.css"></script>
+
+	<link rel="stylesheet" href="leaflet/Control.MiniMap.js"/> 
+	<script src="leaflet/Control.MiniMap.js"></script>
+	
+	<link rel="stylesheet" href="leaflet/Leaflet.LinearMeasurement.css"/> 
+	<script src="leaflet/Leaflet.LinearMeasurement.css"></script>
+	
+	<link rel="stylesheet" href="leaflet/Leaflet.LinearMeasurement.js"/> 
+	<script src="leaflet/Leaflet.LinearMeasurement.js"></script>
+	
+	<link rel="stylesheet" href="leaflet/L.SimpleGraticule.css"/> 
+	<script src="leaflet/L.SimpleGraticule.css"></script>
+	
+	<link rel="stylesheet" href="leaflet/L.SimpleGraticule.js"/> 
+	<script src="leaflet/L.SimpleGraticule.js"></script>
+		
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/gokertanrisever/leaflet-ruler@master/src/leaflet-ruler.css" integrity="sha384-P9DABSdtEY/XDbEInD3q+PlL+BjqPCXGcF8EkhtKSfSTr/dS5PBKa9+/PMkW2xsY" crossorigin="anonymous">  
+	<script src="https://cdn.jsdelivr.net/gh/gokertanrisever/leaflet-ruler@master/src/leaflet-ruler.js" integrity="sha384-N2S8y7hRzXUPiepaSiUvBH1ZZ7Tc/ZfchhbPdvOE5v3aBBCIepq9l+dBJPFdo1ZJ" crossorigin="anonymous"></script>
+    	
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
+	
+
+	<script src="leaflet/geolet.js"></script>
+
+	<title>Kabupaten Bangli</title>
+
+   <body>
+<!-- peta akan ditampilkan disini -->
+         <div style="height:550px" id="mapid"></div>
+    </body>
+	
+	<script src="bangli.js"></script>
+	
+	<script>
+	var mymap = L.map('mapid').setView([-8.3298787,115.3606668], 11);
+	var GoogleMaps = new L.TileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { 
+     opacity: 1.0, attribution: 'Keterampilan Berkehidupan dan WEBSIG UMS'
+	}).addTo(mymap);
+	var GoogleSatelliteHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { 
+     maxZoom: 22, 
+     attribution: 'Ketrampilan Berkehidupan dan WEBSIG UMS' 
+	});
+
+	var baseLayers = {
+     'Google Satellite Hybrid': GoogleSatelliteHybrid,
+     'Google Maps': GoogleMaps,
+	}; 
+
+	L.control.fullscreen({
+	position: 'topleft', // change the position of the button can be topleft, topright, bottomright or bottomleft, default topleft
+	title: 'Show me the fullscreen !', // change the title of the button, default Full Screen
+	titleCancel: 'Exit fullscreen mode', // change the title of the button when fullscreen is on, default Exit Full Screen
+	content: null, // change the content of the button, can be HTML, default null
+	forceSeparateButton: true, // force separate button to detach from zoom buttons, default false
+	forcePseudoFullscreen: true, // force use of pseudo full screen even if full screen API is available, default false
+	fullscreenElement: false // Dom element to render in full screen, false by default, fallback to map._container
+	}).addTo(mymap);
+	
+
+	L.control.groupedLayers(baseLayers).addTo(mymap);
+	var polyg2 = L.geoJson(polygons.features).addTo(mymap);
+	
+	var marker = L.marker([-8.3298787,115.3606668]).addTo(mymap);
+	
+	marker.bindPopup("<b>Informasi</b><br>Yusa Fathuddin, Reztu, Shora Arum");
+	
+	L.control.scale( {position: "bottomright"} ).addTo(mymap);
+	
+	L.control.mousePosition( {prefix: "Koordinat Mouse"} ).addTo(mymap);
+	
+	var north = L.control({
+	position: "bottomleft"});
+	north.onAdd = function(mymap) {
+    var div = L.DomUtil.create("div", "info legend");
+    div.innerHTML = '<img src="data:image/png;base64,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" width="40px" height="40px">';
+    return div;
+	}
+	north.addTo(mymap);
+	
+	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	var osmAttrib='Map data &copy; OpenStreetMap contributors';
+	var osm = new L.TileLayer(osmUrl, {minZoom: 5, maxZoom: 18, attribution: osmAttrib});
+
+	mymap.addLayer(osm);
+	mymap.setView(new L.LatLng(-8.3298787,115.3606668),11);
+		
+	//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
+	var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
+	var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true }).addTo(mymap);
+	
+	mymap.addControl(new L.Control.LinearMeasurement({
+        unitSystem: 'metric',
+        color: '#7FFFD4',
+        type: 'line',
+		position: 'topleft'
+    }));
+
+	L.geolet({position: 'topright'}).addTo(mymap);
+	
+	var options = {interval: 20,
+               showOriginLabel: true,
+               redraw: 'move',
+               zoomIntervals: [
+                {start: 0, end: 3, interval: 50},
+                {start: 4, end: 5, interval: 5},
+                {start: 6, end: 20, interval: 1}
+            ]};
+
+	L.simpleGraticule(options).addTo(mymap);
+	
+	L.control.resetView({
+        position: "topleft",
+        title: "Reset view",
+        latlng: L.latLng([-8.3298787,115.3606668]),
+        zoom: 11,
+    }).addTo(mymap);
+
+	</script>
+
+</html>
